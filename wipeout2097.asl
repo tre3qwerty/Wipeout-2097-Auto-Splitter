@@ -22,13 +22,17 @@ state("ePSXe")
     short player10Lap : 0xB93272;
     short player11Lap : 0xB93362;
     short player12Lap : 0xB93452;
+
+    // equals 0 if the game is paused, 128 if the game is running
+    // somehow connected to the music: if manually set to 0, the music stops despite SFX and controller inputs still working
+    byte running : 0x378A4D;
 }
 
 startup {
     // Indicates if the race has ended
     vars.raceIsFinished = false;
     // Indicates if the game is loading the next race
-    vars.waitingForNextRace = false;
+    vars.waitingForNextRace = true;
 }
 
 update {
@@ -36,8 +40,22 @@ update {
     vars.raceIsFinished = current.player1Lap > current.totalLaps || current.player2Lap > current.totalLaps || current.player3Lap > current.totalLaps || current.player4Lap > current.totalLaps || current.player5Lap > current.totalLaps || current.player6Lap > current.totalLaps || current.player7Lap > current.totalLaps || current.player8Lap > current.totalLaps || current.player9Lap > current.totalLaps || current.player10Lap > current.totalLaps || current.player11Lap > current.totalLaps || current.player12Lap > current.totalLaps;
 
     // If a player's lap count has been reset to 0, a new race has begun
-    if(current.player1Lap == 0 && old.player1Lap > 0) {
+    if(current.player1Lap == 0 && vars.waitingForNextRace) {
         vars.waitingForNextRace = false;
+    }
+}
+
+isLoading {
+    if (current.running == 0) {
+        return true;
+    }
+
+    return false;
+}
+
+start {
+    if (current.running == 0 && old.running != 0) {
+        return true;
     }
 }
 
