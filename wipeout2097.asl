@@ -1,38 +1,36 @@
+state("LiveSplit") {}
 
-state("ePSXe")
+startup
 {
-    int loading : 0xB79B28;
-    // Number of laps in a race
-    byte totalLaps : 0xB93247;
-    // The human player's current position
-    short position : 0xB16D70;
+    Assembly.Load(File.ReadAllBytes("Components/emu-help-v2")).CreateInstance("PS1");
 
-    // All players' current lap is stored in memory as a 2 byte number
-    // In which slot the human player is located seems to be determined at game start
-    // I have been unable to find a way to determine which of the 12 is the human, so I need all of them
-    short player1Lap : 0xB92A02;
-    short player2Lap : 0xB92AF2;
-    short player3Lap : 0xB92BE2;
-    short player4Lap : 0xB92CD2;
-    short player5Lap : 0xB92DC2;
-    short player6Lap : 0xB92EB2;
-    short player7Lap : 0xB92FA2;
-    short player8Lap : 0xB93092;
-    short player9Lap : 0xB93182;
-    short player10Lap : 0xB93272;
-    short player11Lap : 0xB93362;
-    short player12Lap : 0xB93452;
-
-    // equals 0 if the game is paused, 128 if the game is running
-    // somehow connected to the music: if manually set to 0, the music stops despite SFX and controller inputs still working
-    byte running : 0x378A4D;
-}
-
-startup {
     // Indicates if the race has ended
     vars.raceIsFinished = false;
     // Indicates if the game is loading the next race
     vars.waitingForNextRace = true;
+
+    vars.Helper.Load = (Func<dynamic, bool>)(emu => 
+    {
+        emu.Make<int>("loading", 0x8011657C);
+        emu.Make<short>("position", 0x80094D50);
+        emu.Make<byte>("totalLaps", 0x80111227);
+        emu.Make<short>("player1Lap", 0x801109E2);
+        emu.Make<short>("player2Lap", 0x80110AD2);
+        emu.Make<short>("player3Lap", 0x80110BC2);
+        emu.Make<short>("player4Lap", 0x80110CB2);
+        emu.Make<short>("player5Lap", 0x80110DA2);
+        emu.Make<short>("player6Lap", 0x80110E92);
+        emu.Make<short>("player7Lap", 0x80110F82);
+        emu.Make<short>("player8Lap", 0x80111072);
+        emu.Make<short>("player9Lap", 0x80111162);
+        emu.Make<short>("player10Lap", 0x80111252);
+        emu.Make<short>("player11Lap", 0x80111342);
+        emu.Make<short>("player12Lap", 0x80111432);
+
+        emu.Make<byte>("running", 0x801FD1FF);
+        return true;
+    });
+
 }
 
 update {
