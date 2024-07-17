@@ -17,7 +17,7 @@ The splitter will start automatically if the option is enabled (it's recommended
 - [LiveSplit](https://github.com/LiveSplit/LiveSplit)
 - [emu-help](https://github.com/Jujstme/emu-help)
     - to install, download the `emu-help-v2` file located in the `lib` folder of the emu-help repo and put it into the `Components` folder of your livesplit installation
-- [ePSXe 2.0.5](https://www.epsxe.com/download.php)
+- A working PS1 emulator (currently tested: [Duckstation](https://www.duckstation.org/), [ePSXe 2.0.5](https://www.epsxe.com/download.php))
 - Wipeout XL (NTSC)
 
 ### Installation
